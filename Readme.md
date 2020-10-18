@@ -4,9 +4,12 @@
  
  Jeisson G. Sanchez R. 
  
+ ### Test
+ 
+ [![CircleCI](https://circleci.com/gh/JaySanchez0/Clean-Code.svg?style=svg)](https://circleci.com/gh/JaySanchez0/Clean-Code)
  
  
- ### Nota:
+ ### Note:
  
 By run and test the app, please configure the next variable in file application.properties into resources folder
  
