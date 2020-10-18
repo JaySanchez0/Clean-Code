@@ -12,7 +12,7 @@
 
 ### Docker Hub
 
-[ver](https://hub.docker.com/repository/docker/jsanchez0/roulette-java)
+[ver](https://hub.docker.com/r/jsanchez0/roulette-java)
 
 ### Docker build
 
