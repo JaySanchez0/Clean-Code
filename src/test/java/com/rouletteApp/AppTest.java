@@ -6,19 +6,28 @@ package com.rouletteApp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rouletteApp.model.ColorBet;
 import com.rouletteApp.model.NumberBet;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import redis.embedded.RedisServer;
+import java.io.IOException;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = {
+        "spring.redis.host=localhost",
+        "spring.redis.port=3032"
+})
 public class AppTest {
 
     @Autowired
@@ -29,6 +38,17 @@ public class AppTest {
 
     private String id;
 
+    private static RedisServer server;
+
+    @BeforeClass
+    public static void before(){
+        try {
+            server = new RedisServer(3032);
+            server.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void shouldBeCreateANewRoulette() throws Exception {
@@ -101,5 +121,10 @@ public class AppTest {
         bet.setNumber(5);
         mock.perform(post("/roulette/"+id+"/bets")
                 .content(mapper.writeValueAsBytes(bet)).contentType("application/json")).andExpect(status().is4xxClientError());
+    }
+
+    @AfterClass
+    public static void after(){
+        server.stop();
     }
 }
