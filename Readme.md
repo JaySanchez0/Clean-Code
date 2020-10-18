@@ -8,18 +8,7 @@
  
  [![CircleCI](https://circleci.com/gh/JaySanchez0/Clean-Code.svg?style=svg)](https://circleci.com/gh/JaySanchez0/Clean-Code)
  
- 
- ### Note:
- 
-By run and test the app, please configure the next variable in file application.properties into resources folder
- 
-~~~
-spring.redis.host=db_host
-spring.redis.port=db_port
-spring.redis.password=db_password
-spring.redis.database=0
 
-~~~
 
 ### Docker Hub
 
@@ -28,13 +17,13 @@ spring.redis.database=0
 ### Docker build
 
 ~~~
-    docker build -tag name .
+    docker build -tag name_image .
 ~~~
 
 ### Execute the image
 
 ~~~
-    docker run -p machine_port:container_port -e PORT=container_port image_name
+    docker run -e PORT=container_port -e REDISHOST=url_redis -e REDISPORT=port_redis -e REDISPASSWORD=redis_password -p machine_port:container_port jsanchez0/roulette-java
 ~~~
 
 ### Execute JAR
