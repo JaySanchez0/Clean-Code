@@ -20,3 +20,9 @@
 ~~~
     docker run -p machine_port:container_port -e PORT=container_port image_name
 ~~~
+
+### Execute JAR
+
+~~~
+    java -Dserver.port=port_server -Dspring.redis.host=host_db -Dspring.redis.port=port_db -Dspring.redis.password=0 -Dspring.redis.database=0 -jar Code-Clean.jar 
+~~~
