@@ -12,7 +12,7 @@ public class NumberBet extends Bet {
     }
     public void setNumber(int number) throws RouletteException {
         if(number<0 || number>36)
-            throw new RouletteException("Invalid Number");
+            throw new RouletteException(RouletteException.invalidNumber);
         this.number = number;
     }
 }

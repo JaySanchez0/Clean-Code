@@ -37,7 +37,7 @@ public class RouletteServiceImpl implements RouletteService {
     public void openRoulette(String id) throws RouletteException {
         Roulette roulette = getRouletteById(id);
         if(roulette==null || roulette.isOpen())
-            throw new RouletteException("");
+            throw new RouletteException(RouletteException.invalidOperation);
         roulette.setOpen(true);
         repo.save(roulette);
     }
@@ -46,14 +46,14 @@ public class RouletteServiceImpl implements RouletteService {
     public List<Bet> closeRoulette(String id) throws RouletteException {
         Roulette roulette = getRouletteById(id);
         if(roulette==null || !roulette.isOpen()){
-            throw new RouletteException("");
+            throw new RouletteException(RouletteException.invalidOperation);
         }
         roulette.setOpen(false);
         return repo.save(roulette).getBets();
     }
 
     @Override
-    public void addBet(String rouletteId, Bet bet) throws RouletteException {
+    public void addBet(String rouletteId, Bet bet){
         Roulette roulette = getRouletteById(rouletteId);
         roulette.addBet(bet);
         repo.save(roulette);

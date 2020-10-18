@@ -14,7 +14,7 @@ public class ColorBet extends Bet{
     }
 
     public void setColor(String color) throws RouletteException {
-        if(!color.equals("black") && !color.equals("red")) throw new RouletteException("Invalid Color");
+        if(!color.equals("black") && !color.equals("red")) throw new RouletteException(RouletteException.invalidColor);
         this.color = color;
     }
 }

@@ -24,7 +24,7 @@ public class Bet {
 
     public void setMoney(int money) throws RouletteException {
         if(money<0 || money>10000)
-            throw new RouletteException("Invalid Money");
+            throw new RouletteException(RouletteException.notIsMoney);
         this.money = money;
     }
 
