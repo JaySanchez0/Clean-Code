@@ -10,6 +10,11 @@ public class NumberBet extends Bet {
     public NumberBet(){
     }
 
+    public NumberBet(int money, int number) throws RouletteException {
+        this.number = number;
+        setMoney(money);
+    }
+
     public int getNumber(){
         return number;
     }

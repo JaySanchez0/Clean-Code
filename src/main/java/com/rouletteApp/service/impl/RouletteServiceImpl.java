@@ -57,8 +57,9 @@ public class RouletteServiceImpl implements RouletteService {
     }
 
     @Override
-    public void addBet(String rouletteId, Bet bet){
+    public void addBet(String rouletteId, Bet bet) throws RouletteException{
         Roulette roulette = getRouletteById(rouletteId);
+        if(roulette==null || !roulette.isOpen()) throw new RouletteException(RouletteException.inavlidRoulette);
         roulette.addBet(bet);
         repo.save(roulette);
     }

@@ -4,6 +4,7 @@
  
  Jeisson G. Sanchez R. 
  
+ 
  ### Test
  
  [![CircleCI](https://circleci.com/gh/JaySanchez0/Clean-Code.svg?style=svg)](https://circleci.com/gh/JaySanchez0/Clean-Code)
@@ -17,7 +18,7 @@
 ### Docker build
 
 ~~~
-    docker build -tag name_image .
+    docker build --tag name_image .
 ~~~
 
 ### Execute the image

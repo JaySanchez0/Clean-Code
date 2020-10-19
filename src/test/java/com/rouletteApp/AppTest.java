@@ -4,6 +4,7 @@
 package com.rouletteApp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rouletteApp.model.Bet;
 import com.rouletteApp.model.BetList;
 import com.rouletteApp.model.ColorBet;
 import com.rouletteApp.model.NumberBet;
@@ -93,7 +94,7 @@ public class AppTest {
     }
 
     @Test
-    public void shouldBeFindAnWinner() throws Exception{
+    public void shouldBeFindAnWinnerWithColor() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
             id= result.getResponse().getContentAsString();
         });
@@ -109,9 +110,43 @@ public class AppTest {
         mock.perform(patch("/roulette/"+id+"/close").header("Authorization","app")).andDo((result)->{
             BetList list = mapper.readValue(result.getResponse().getContentAsString(),BetList.class);
             assertTrue(true);
-            assertTrue((list.get(0).getWinMoney()>0 || list.get(1).getWinMoney()>0) && !(list.get(0).getWinMoney()>0 && list.get(1).getWinMoney()>0));
+            assertTrue((list.get(0).getWinMoney()==(double)180 || list.get(1).getWinMoney()==(double)180) && !(list.get(0).getWinMoney()>0 && list.get(1).getWinMoney()>0));
         });
 
+    }
+    @Test
+    public void shouldBeFindAnWinnerWithNumber() throws Exception{
+        mock.perform(post("/roulette")).andDo(result ->{
+            id= result.getResponse().getContentAsString();
+        });
+        mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
+        for(int i=0;i<37;i++){
+            NumberBet bet = new NumberBet(100,i);
+            mock.perform(post("/roulette/"+id+"/bets")
+                    .content(mapper.writeValueAsBytes(bet)).contentType("application/json").header("Authorization","app")).andExpect(status().is2xxSuccessful());
+        }
+        mock.perform(patch("/roulette/"+id+"/close").header("Authorization","app")).andDo((result)->{
+            BetList list = mapper.readValue(result.getResponse().getContentAsString(),BetList.class);
+            Bet bet = null;
+            for(Bet b:list){
+                if(b.getMoney()==0 && b.getWinMoney()>0) bet = b;
+            }
+            assertTrue(bet.getWinMoney()==(double) 500);
+        });
+
+    }
+
+    @Test
+    public void shouldntBeAddedABeatInCloseRoulette() throws Exception{
+        mock.perform(post("/roulette")).andDo(result ->{
+            id= result.getResponse().getContentAsString();
+        });
+        ColorBet bet = new ColorBet();
+        bet.setMoney(100);
+        bet.setColor("black");
+        mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
+        mock.perform(post("/roulette/"+id+"/bets").content(mapper.writeValueAsString(bet)).
+                header("Content-Type","application/json")).andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -122,6 +157,7 @@ public class AppTest {
         ColorBet bet = new ColorBet();
         bet.setMoney(100);
         bet.setColor("black");
+        mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
         mock.perform(post("/roulette/"+id+"/bets")
                 .content(mapper.writeValueAsBytes(bet)).contentType("application/json").header("Authorization","app")).andExpect(status().is2xxSuccessful());
     }
@@ -130,6 +166,7 @@ public class AppTest {
         mock.perform(post("/roulette")).andDo(result ->{
             id= result.getResponse().getContentAsString();
         });
+        mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
         NumberBet bet = new NumberBet();
         bet.setMoney(100);
         bet.setNumber(5);
