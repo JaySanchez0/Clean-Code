@@ -4,15 +4,18 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.rouletteApp.exception.RouletteException;
 import org.springframework.data.redis.core.RedisHash;
+import java.io.Serializable;
+
+@RedisHash
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ColorBet.class, name = "Color"),
         @JsonSubTypes.Type(value = NumberBet.class, name = "Number")
 })
-@RedisHash
-public class Bet {
+public abstract class Bet implements Serializable {
     private int money;
     private String idClient;
+    private double winMoney;
 
     public Bet(){
 
@@ -35,4 +38,14 @@ public class Bet {
     public void setIdClient(String idClient) {
         this.idClient = idClient;
     }
+
+    public double getWinMoney() {
+        return winMoney;
+    }
+
+    public void setWinMoney(double winMoney) {
+        this.winMoney = winMoney;
+    }
+
+    public abstract void validIsWin(int number);
 }

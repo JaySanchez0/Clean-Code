@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class RouletteServiceImpl implements RouletteService {
@@ -49,7 +50,10 @@ public class RouletteServiceImpl implements RouletteService {
             throw new RouletteException(RouletteException.invalidOperation);
         }
         roulette.setOpen(false);
-        return repo.save(roulette).getBets();
+        Random random = new Random();
+        int winNumber = random.nextInt(37);
+        for(Bet bet: roulette.getBets()) bet.validIsWin(winNumber);
+        return (ArrayList<Bet>) repo.save(roulette).getBets();
     }
 
     @Override

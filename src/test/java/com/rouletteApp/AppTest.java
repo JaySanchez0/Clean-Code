@@ -4,6 +4,7 @@
 package com.rouletteApp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rouletteApp.model.BetList;
 import com.rouletteApp.model.ColorBet;
 import com.rouletteApp.model.NumberBet;
 import org.junit.AfterClass;
@@ -18,6 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import redis.embedded.RedisServer;
 import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,6 +90,28 @@ public class AppTest {
             id= result.getResponse().getContentAsString();
         });
         mock.perform(patch("/roulette/"+id+"/close")).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBeFindAnWinner() throws Exception{
+        mock.perform(post("/roulette")).andDo(result ->{
+            id= result.getResponse().getContentAsString();
+        });
+        ColorBet bet = new ColorBet();
+        bet.setMoney(100);
+        bet.setColor("black");
+        mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
+        mock.perform(post("/roulette/"+id+"/bets")
+                .content(mapper.writeValueAsBytes(bet)).contentType("application/json").header("Authorization","app")).andExpect(status().is2xxSuccessful());
+        bet.setColor("red");
+        mock.perform(post("/roulette/"+id+"/bets")
+                .content(mapper.writeValueAsBytes(bet)).contentType("application/json").header("Authorization","app")).andExpect(status().is2xxSuccessful());
+        mock.perform(patch("/roulette/"+id+"/close").header("Authorization","app")).andDo((result)->{
+            BetList list = mapper.readValue(result.getResponse().getContentAsString(),BetList.class);
+            assertTrue(true);
+            assertTrue((list.get(0).getWinMoney()>0 || list.get(1).getWinMoney()>0) && !(list.get(0).getWinMoney()>0 && list.get(1).getWinMoney()>0));
+        });
+
     }
 
     @Test
