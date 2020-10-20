@@ -47,8 +47,9 @@ public class RouletteServiceImpl implements RouletteService {
         roulette.setOpen(false);
         Random random = new Random();
         int winNumber = random.nextInt(37);
+        roulette.setWinNumber(winNumber);
         for(Bet bet: roulette.getBets()) bet.validIsWin(winNumber);
-        return (ArrayList<Bet>) repo.save(roulette).getBets();
+        return repo.save(roulette).getBets();
     }
     @Override
     public void addBet(String rouletteId, Bet bet) throws RouletteException{

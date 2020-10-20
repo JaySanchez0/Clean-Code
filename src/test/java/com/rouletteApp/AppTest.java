@@ -30,20 +30,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {
         "spring.redis.host=localhost",
-        "spring.redis.port=3032"
+        "spring.redis.port=3032",
+        "spring.redis.password=",
+        "spring.redis.database=0"
 })
 public class AppTest {
-
     @Autowired
     private MockMvc mock;
-
     @Autowired
     private ObjectMapper mapper;
-
     private String id;
-
     private static RedisServer server;
-
     @BeforeClass
     public static void before(){
         try {
@@ -53,12 +50,10 @@ public class AppTest {
             e.printStackTrace();
         }
     }
-
     @Test
     public void shouldBeCreateANewRoulette() throws Exception {
         mock.perform(post("/roulette")).andExpect(status().is2xxSuccessful());
     }
-
     @Test
     public void shouldBeOpenRoulette() throws Exception {
         mock.perform(post("/roulette")).andDo(result ->{
@@ -66,7 +61,6 @@ public class AppTest {
         });
         mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
     }
-
     @Test
     public void shoudntBeOpenRolette() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
@@ -75,7 +69,6 @@ public class AppTest {
         mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
         mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is4xxClientError());
     }
-
     @Test
     public void shoudBeCloseARoulette() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
@@ -84,7 +77,6 @@ public class AppTest {
         mock.perform(patch("/roulette/"+id+"/open")).andExpect(status().is2xxSuccessful());
         mock.perform(patch("/roulette/"+id+"/close")).andExpect(status().is2xxSuccessful());
     }
-
     @Test
     public void shoudntBeCloseARoulette() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
@@ -92,7 +84,6 @@ public class AppTest {
         });
         mock.perform(patch("/roulette/"+id+"/close")).andExpect(status().is4xxClientError());
     }
-
     @Test
     public void shouldBeFindAnWinnerWithColor() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
@@ -135,7 +126,6 @@ public class AppTest {
         });
 
     }
-
     @Test
     public void shouldntBeAddedABeatInCloseRoulette() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
@@ -148,7 +138,6 @@ public class AppTest {
         mock.perform(post("/roulette/"+id+"/bets").content(mapper.writeValueAsString(bet)).
                 header("Content-Type","application/json")).andExpect(status().is4xxClientError());
     }
-
     @Test
     public void shouldBeAddABetWithCorrectColor() throws Exception{
         mock.perform(post("/roulette")).andDo(result ->{
@@ -184,7 +173,6 @@ public class AppTest {
         mock.perform(post("/roulette/"+id+"/bets")
                 .content(mapper.writeValueAsBytes(bet)).contentType("application/json")).andExpect(status().is4xxClientError());
     }
-
     @AfterClass
     public static void after(){
         server.stop();

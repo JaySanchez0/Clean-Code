@@ -10,6 +10,7 @@ public class Roulette implements Serializable {
     @Id
     private String id;
     private boolean open;
+    private int winNumber;
     private BetList bets = new BetList();
     public  Roulette(){
         open=false;
@@ -34,5 +35,11 @@ public class Roulette implements Serializable {
     }
     public void addBet(Bet bet) {
         bets.add(bet);
+    }
+    public int getWinNumber() {
+        return winNumber;
+    }
+    public void setWinNumber(int winNumber) {
+        this.winNumber = winNumber;
     }
 }
