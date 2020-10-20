@@ -9,7 +9,7 @@
  
  - Java JDK
  - Gradle
- - DB Redis (We recommend using a database provided by redis labs free account).
+ - DB Redis (We recommend using a database provided by redis labs free account) [Redis Labs Link](https://redislabs.com/redis-enterprise-cloud/overview/).
  
  ### Test
  
