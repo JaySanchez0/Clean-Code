@@ -8,14 +8,9 @@ import java.util.List;
 
 public interface RouletteService {
     String addRoulette(Roulette roulette);
-
     Roulette getRouletteById(String id);
-
     void openRoulette(String id) throws RouletteException;
-
     List<Roulette> getAllRoulettes();
-
     List<Bet> closeRoulette(String id) throws RouletteException;
-
     void addBet(String rouletteId, Bet bet) throws RouletteException;
 }

@@ -9,7 +9,6 @@ public class ColorBet extends Bet{
     public ColorBet(){
 
     }
-
     @Override
     public void validIsWin(int number) {
         try {
@@ -22,11 +21,9 @@ public class ColorBet extends Bet{
 
         }
     }
-
     public String getColor() {
         return color;
     }
-
     public void setColor(String color) throws RouletteException {
         if(!color.equals("black") && !color.equals("red")) throw new RouletteException(RouletteException.invalidColor);
         this.color = color;

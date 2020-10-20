@@ -20,32 +20,25 @@ public abstract class Bet implements Serializable {
     public Bet(){
 
     }
-
     public int getMoney() {
         return money;
     }
-
     public void setMoney(int money) throws RouletteException {
         if(money<0 || money>10000)
             throw new RouletteException(RouletteException.notIsMoney);
         this.money = money;
     }
-
     public String getIdClient() {
         return idClient;
     }
-
     public void setIdClient(String idClient) {
         this.idClient = idClient;
     }
-
     public double getWinMoney() {
         return winMoney;
     }
-
     public void setWinMoney(double winMoney) {
         this.winMoney = winMoney;
     }
-
     public abstract void validIsWin(int number);
 }

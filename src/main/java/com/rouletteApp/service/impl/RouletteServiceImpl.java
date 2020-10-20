@@ -15,7 +15,6 @@ import java.util.Random;
 public class RouletteServiceImpl implements RouletteService {
     @Autowired
     private RouletteRepository repo;
-
     @Override
     public List<Roulette> getAllRoulettes() {
         ArrayList<Roulette> roulettes = new ArrayList<>();
@@ -24,16 +23,13 @@ public class RouletteServiceImpl implements RouletteService {
 
         return  roulettes;
     }
-
     public String addRoulette(Roulette roulette){
         return repo.save(roulette).getId();
     }
-
     @Override
     public Roulette getRouletteById(String id) {
         return repo.findById(id).get();
     }
-
     @Override
     public void openRoulette(String id) throws RouletteException {
         Roulette roulette = getRouletteById(id);
@@ -42,7 +38,6 @@ public class RouletteServiceImpl implements RouletteService {
         roulette.setOpen(true);
         repo.save(roulette);
     }
-
     @Override
     public List<Bet> closeRoulette(String id) throws RouletteException {
         Roulette roulette = getRouletteById(id);
@@ -55,7 +50,6 @@ public class RouletteServiceImpl implements RouletteService {
         for(Bet bet: roulette.getBets()) bet.validIsWin(winNumber);
         return (ArrayList<Bet>) repo.save(roulette).getBets();
     }
-
     @Override
     public void addBet(String rouletteId, Bet bet) throws RouletteException{
         Roulette roulette = getRouletteById(rouletteId);
